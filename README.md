@@ -3,7 +3,7 @@
 This is a simple (linux) command line program to generate invoices (with the 
 Australian options of GST / ABN included). There is also capability to batch 
 create invoices from a CSV file. An example of an invoice produced by this 
-program can be found in the `./samples` subdirectory.
+program can be found in the `samples` subdirectory.
 
 Invoice parameters are set either inside the program through prompts, or 
 through the `config.py` file. The invoice is written in Markdown format, 
@@ -40,14 +40,15 @@ working directory. Do not suffix directories with `/`, and although there
 are no *expected* problems to occur, avoid using spaces in paths to be safe.
 
 ## CSV File Handling and Expectations
-An example CSV will be included in the `samples` directory soon.  
+An example CSV has been included in the `samples` subdirectory. The batch 
+output from that CSV can be found in the `samples/batch_output` subdirectory.  
 CSV files are expected to contain at least 5 headers named as follows: 
 - `name` : Recipient name
 - `contact1` : Recipient details (line 1) (`contact2` for a second contact 
 line is optional)
 - `desc` : Activity description
-- `qty` : Activity quantity
-- `unitPrc` : Unit price
+- `qty` : Activity quantity (or hrs)
+- `unitPrc` : Unit price (in $)
 
 Recipient fields may be empty in order to accomodate invoices where there is 
 more than one activity. Entries in the CSV file that contain an empty `name` 
@@ -57,5 +58,5 @@ attributed to the recipient details above.
 ## Further Updates
 - Implement functionality for custom invoice numbers, custom output filenames
 - Streamline commandline arguments for the above
-- Ability to generate reports/logs.
-- Avoid system commands.
+- Ability to generate reports/logs
+- Avoiding system commands
