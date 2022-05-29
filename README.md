@@ -47,8 +47,8 @@ An example .csv will be included in the `samples` directory soon.
 - `contact2` : Recipient details (line 2 - optional)
 - `desc` : Activity description
 - `qty` : Activity quantity
-- `unitPrc` : Unit price  
-- 
+- `unitPrc` : Unit price
+
 Recipient fields may be empty in order to accomodate invoices where there is 
 more than one activity. Entries in the .csv file that contain an empty `name` 
 and `contact1` field but filled `desc`, `qty`, and `unitPrc` fields will be 
