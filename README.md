@@ -56,4 +56,4 @@ attributed to the recipient details above.
 
 ## Further Updates
 - Implement functionality for custom invoice numbers, custom output filenames
-- Generate report/log functionality
+- Ability to generate report/log.
