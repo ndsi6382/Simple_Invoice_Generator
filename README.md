@@ -13,16 +13,16 @@ before being converted to PDF.
 There is only one dependency: `md2pdf`, which can be installed with: 
 `pip install md2pdf`.  
 After navigating to the directory of the program, run 
-`sudo chmod +x ./simple_invoice_generator.py` to allow the file's execution.
+`sudo chmod +x ./simple_invoice_generator.py` to allow the file's execution.  
 Usage is as follows: 
 `./simple_invoice_generator.py [-h] [[-s] OR [-b INPUT.csv]] [-o OUTPUT_DIR]`.  
 Sender details must always be set in `config.py`.  
 If no arguments are given, the user is prompted to enter recipient details, 
 before generating an invoice.  
-`-s` creates a singular invoice from fields specified in the `config.py` file.  
-`-b INPUT.CSV` batch creates invoices from a specified .csv file.  
-`-o OUTPUT_DIR` overrides the output directory specified in `config.py`.  
-`-h` displays the help message.  
+- `-s` creates a singular invoice from fields specified in the `config.py` file.
+- `-b INPUT.CSV` batch creates invoices from a specified .csv file.
+- `-o OUTPUT_DIR` overrides the output directory specified in `config.py`.
+- `-h` displays the help message.  
 
 ## Configuration
 `config.py` contains parameters for changing recipient, activity, and sender 
@@ -40,15 +40,18 @@ working directory. Do not suffix directories with `/`, and although there
 are no *expected* problems to occur, avoid using spaces in paths to be safe.
 
 ## CSV Handling
-An example .csv will be included in the sample folder soon.  
+An example .csv will be included in the `samples` folder soon.  
 .csv files are expected to contain at least 6 headers named as follows: 
-Recipient name: `name`, Recipient details (line 1): `contact1`, Recipient 
-details (line 2 - optional): `contact2`, Activity description: `desc`, 
-Activity quantity: `qty`, Unit price: `unitPrc`. Recipient fields may be empty 
-in order to accomodate invoices where there is more than one activity. Entries 
-in the .csv file that contain an empty `name` and `contact1` field but filled 
-`desc`, `qty`, and `unitPrc` fields will be attributed to the recipient details 
-above.
+- `name` : Recipient name
+- `contact1` : Recipient details (line 1)
+- `contact2` : Recipient details (line 2 - optional)
+- `desc` : Activity description
+- `qty` : Activity quantity
+- `unitPrc` : Unit price  
+Recipient fields may be empty in order to accomodate invoices where there is 
+more than one activity. Entries in the .csv file that contain an empty `name` 
+and `contact1` field but filled `desc`, `qty`, and `unitPrc` fields will be 
+attributed to the recipient details above.
 
 ## Further Updates
 - Implement functionality for custom invoice numbers, custom output filenames
