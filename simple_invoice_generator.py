@@ -4,6 +4,7 @@ from datetime import datetime
 import getopt, os, sys, csv
 from config import *
 from copy import deepcopy
+import md2pdf
 
 # Absolute path of program directory
 DIR = os.path.dirname(os.path.abspath(__file__))
@@ -225,10 +226,10 @@ def help():
     print("  no arguments:   create invoice through prompts to user")
     print("  -h, --help:     display this help message and exit")
     print("  -s, --singular: create singular invoice from parameters specified in config.py")
-    print("  -b INPUT.CSV, --batch INPUT.CSV:    create batch invoices from a specified .csv file")
+    print("  -b INPUT.CSV, --batch INPUT.CSV:    batch creates invoices from a specified .csv file")
     print("  -o OUTPUT_DIR, --output OUTPUT_DIR: override output directory specified in config.py")
     print()
-    print("Further information available in README...")
+    print("Further information available in README.md ...")
     print("\nGoodbye!")
     sys.exit(1)
 
@@ -237,5 +238,4 @@ if __name__ == "__main__":
 
 # TODO:
 #   Complete implementation of custom invoice number, custom output filename
-#   Report / Log
-#   Complete the help message
+#   Generate Report/log functionality

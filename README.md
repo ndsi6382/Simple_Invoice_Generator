@@ -12,8 +12,10 @@ before being converted to PDF.
 ## Setup and Usage
 There is only one dependency: `md2pdf`, which can be installed with: 
 `pip install md2pdf`.  
+After navigating to the directory of the program, run 
+`sudo chmod +x ./simple_invoice_generator.py` to allow the file's execution.
 Usage is as follows: 
-`./simple_invoice_generator.py [-h] [[-s] OR [-b INPUT.csv]] [-o OUTPUT_DIR]` 
+`./simple_invoice_generator.py [-h] [[-s] OR [-b INPUT.csv]] [-o OUTPUT_DIR]`.  
 Sender details must always be set in `config.py`.  
 If no arguments are given, the user is prompted to enter recipient details, 
 before generating an invoice.  
@@ -38,7 +40,7 @@ working directory. Do not suffix directories with `/`, and although there
 are no *expected* problems to occur, avoid using spaces in paths to be safe.
 
 ## CSV Handling
-An example .csv will be included here soon.  
+An example .csv will be included in the sample folder soon.  
 .csv files are expected to contain at least 6 headers named as follows: 
 Recipient name: `name`, Recipient details (line 1): `contact1`, Recipient 
 details (line 2 - optional): `contact2`, Activity description: `desc`, 

@@ -52,8 +52,8 @@ class Options:
     gst = False
 #   "" for no letterhead, otherwise enter path to letterhead.
 #   The letterhead is an image file with a recommended width of 628px.
-    letterhead = "sample_letterhead.png"
+    letterhead = "samples/sample_letterhead.png"
 #   "" for no footer message.
     footerMsg = "*Full amount to be paid within 14 days of receipt."
 #   "" for current working directory, otherwise enter path to output directory.
-    outputDir = "sample_output"
+    outputDir = "samples"
