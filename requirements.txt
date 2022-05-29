@@ -1,2 +1,0 @@
-# Dependency for Simple Invoice Generator
-md2pdf
