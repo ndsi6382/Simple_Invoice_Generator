@@ -4,10 +4,9 @@ from datetime import datetime
 import getopt, os, sys, csv
 from config import *
 from copy import deepcopy
-import md2pdf
 
 # Absolute path of program directory
-DIR = os.path.dirname(os.path.abspath(__file__))
+PDIR = os.path.dirname(os.path.abspath(__file__))
 # Absolute path of current working directory
 CWD = os.getcwd()
 
@@ -81,7 +80,7 @@ class Invoice:
         
         setInvNbr(self, customNumber)
         setFilename(self, customFilename)
-        with open(f"{self.mdAbsFilename}", 'w') as file:
+        with open(self.mdAbsFilename, 'w') as file:
             # Letterhead
             if Options.letterhead:
                 file.write(f"![Letterhead]({Options.letterhead})  \n")
@@ -128,9 +127,9 @@ class Invoice:
                 file.write(f"<sub><i>{Options.footerMsg}</i></sub>\n")
 
         # Execution Commands
-        os.system(f"md2pdf --css={DIR}/default.css \"{self.mdAbsFilename}\" " +
+        os.system(f"md2pdf --css={PDIR}/default.css \"{self.mdAbsFilename}\" " +
                   f"\"{self.mdAbsFilename.replace('.md', '.pdf')}\"")
-        os.system(f"rm \"{self.mdAbsFilename}\"")
+        os.remove(self.mdAbsFilename)
 
 
 def main():
@@ -159,9 +158,8 @@ def main():
     except getopt.error:
         print("Incorrect usage!")
         help()
-    
-    Settings.print()
 
+    Settings.print()
     if Settings.mode == "i":
         inputMode()
     elif Settings.mode == "s":
@@ -169,7 +167,6 @@ def main():
     elif Settings.mode == "b":
         batchMode()
     print("Done. Goodbye!")
-    return
 
 def inputMode():
     name = input("Recipient Name: ")
@@ -228,14 +225,16 @@ def help():
     print("  -s, --singular: create singular invoice from parameters specified in config.py")
     print("  -b INPUT.CSV, --batch INPUT.CSV:    batch creates invoices from a specified .csv file")
     print("  -o OUTPUT_DIR, --output OUTPUT_DIR: override output directory specified in config.py")
-    print()
-    print("Further information available in README.md ...")
-    print("\nGoodbye!")
+    print("\nFurther information available in README.md")
+    print("Goodbye!")
     sys.exit(1)
 
 if __name__ == "__main__":
     main()
+    sys.exit(0)
 
 # TODO:
-#   Complete implementation of custom invoice number, custom output filename
-#   Generate Report/log functionality
+#   Implement functionality for custom invoice numbers, custom output filenames
+#   Streamline command-line arguments for the above
+#   Ability to generate reports/logs
+#   Avoid system commands
