@@ -27,21 +27,27 @@ before generating an invoice.
 details, as well as formatting options such as letterheads (for which the 
 recommended width is 628px), footers, and the setting of a default output
 directory. To **not** include a field, set its value to an empty string `""`. 
-All activity fields must be filled - where "qty" is not applicable, a hyphen
+All activity fields must be filled - where a 'qty' is not applicable, a hyphen
 string `"-"` should be used instead. The default styling makes use of a small 
 css file, which can be modified if desired.  
 
-Please note the following when using paths: paths beginning with '/' or '\' 
-will be treated as absolute paths. Syntax such as '.', '..', or not being 
+Please note the following when using paths: paths beginning with `/` or `\` 
+will be treated as absolute paths. Syntax such as `.`, `..`, or not being 
 prefixed with a slash will be interpreted as a subdirectory of the current 
-working directory.Do not suffix directories with '/'.
+working directory. Do not suffix directories with `/`, and although there 
+are no *expected* problems to occur, avoid using spaces in paths to be safe.
 
 ## CSV Handling
 An example .csv will be included here soon.  
-.csv files are expected to contain 6 headers named as follows: Recipient name: 
-`name`, Recipient details (line 1): `contact1`, Recipient details (line 2 - 
-optional): `contact2`, Activity description: `desc`, Activity quantity: `qty`, 
-Unit price: `unitPrc`. Recipient fields may be empty in order to accomodate 
-invoices where there is more than one activity. Entries in the .csv file that 
-contain an empty `name` and `contact1` field but filled `desc`, `qty`, and 
-`unitPrc` fields will be attributed to the recipient details above.
+.csv files are expected to contain at least 6 headers named as follows: 
+Recipient name: `name`, Recipient details (line 1): `contact1`, Recipient 
+details (line 2 - optional): `contact2`, Activity description: `desc`, 
+Activity quantity: `qty`, Unit price: `unitPrc`. Recipient fields may be empty 
+in order to accomodate invoices where there is more than one activity. Entries 
+in the .csv file that contain an empty `name` and `contact1` field but filled 
+`desc`, `qty`, and `unitPrc` fields will be attributed to the recipient details 
+above.
+
+## Further Updates
+- Implement functionality for custom invoice numbers, custom output filenames
+- Generate report/log functionality
