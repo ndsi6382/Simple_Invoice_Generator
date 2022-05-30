@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-
 from datetime import datetime
-import getopt, os, sys, csv
+import getopt, os, sys, csv, re
 from config import *
 from copy import deepcopy
+from md2pdf.core import md2pdf
 
 # Absolute path of program directory
 PDIR = os.path.dirname(os.path.abspath(__file__))
@@ -13,7 +13,9 @@ CWD = os.getcwd()
 class Settings:
     mode = "i"
     batchfile = ""
-    outputDir = ""
+    outputDir = "" # Must be set with the setDirectory method.
+    report = Options.Report
+
     def setDirectory(path):
         if not os.path.isabs(path):
             path = CWD + "/" + path
@@ -27,6 +29,7 @@ class Settings:
         print(f"  Output directory: {Settings.outputDir}")
         if Settings.batchfile:
             print(f"  Batch file: {Settings.batchfile}")
+        print(f"  Generate report: {'yes' if Settings.report else 'no'}")
 
 class Invoice:
     def __init__(self, name, line1, line2):
@@ -82,13 +85,13 @@ class Invoice:
         setFilename(self, customFilename)
         with open(self.mdAbsFilename, 'w') as file:
             # Letterhead
-            if Options.letterhead:
-                file.write(f"![Letterhead]({Options.letterhead})  \n")
+            if Options.Letterhead:
+                file.write(f"![Letterhead]({Options.Letterhead})  \n")
             # Title
             file.write( "# Tax Invoice  \n")
             file.write(f"***Invoice Number:*** *{self.nbr}*  \n")
             file.write(f"***Date:*** *{self.date}*  \n")
-            file.write("  ---  \n")
+            file.write("  ---\n")
             # Recipient Details
             file.write(f"### Invoice for:  \n")
             file.write("| | |\n")
@@ -96,7 +99,7 @@ class Invoice:
             file.write(f"| **Name:** | {self.name} |\n")
             file.write(f"| **Details:** | {self.line1}<br>{self.line2} |\n")
             file.write("| | |\n")
-            file.write("  ---  \n")
+            file.write("  ---\n")
             # Activities Section
             file.write("| Services | Qty | Unit Price | Total Price |\n")
             file.write("| --- | ---: | ---: | ---: |\n")
@@ -104,8 +107,9 @@ class Invoice:
                 file.write(f"| {e['desc']} | {e['qty']} | " +
                         f"{'-' if e['unitPrc'] < 0 else ''}${abs(e['unitPrc']):.2f} | " + 
                         f"{'-' if e['tot'] < 0 else ''}${abs(e['tot']):.2f} |\n")
+            # Total / GST Statement
             file.write(f"**Total: ${sum([e['tot'] for e in self.activities]):.2f}**  \n")
-            if Options.gst:
+            if Options.GST:
                 file.write("<sub><i>*Including GST.</i></sub>\n")
             else:
                 file.write("<sub><i>*No GST has been charged.</i></sub>\n")
@@ -114,28 +118,35 @@ class Invoice:
             file.write(f"### **Payable to:**\n")
             file.write("| | |\n")
             file.write("| :--- | :--- |\n")
-            file.write(f"| **Name:** | {Sender.name} |\n")
-            file.write(f"| **BSB:** | {Sender.bsb} |\n")
-            file.write(f"| **Account Number:** | {Sender.accNo} |\n")
-            file.write(f"| **Bank Name:** | {Sender.bankName} |\n")
-            if Sender.abn:
-                file.write(f"| **ABN:** | {Sender.abn} |\n")
+            file.write(f"| **Name:** | {Sender.Name} |\n")
+            file.write(f"| **BSB:** | {Sender.BSB} |\n")
+            file.write(f"| **Account Number:** | {Sender.AccNo} |\n")
+            if Sender.BankName:
+                file.write(f"| **Bank Name:** | {Sender.BankName} |\n")
+            if Sender.ABN:
+                file.write(f"| **ABN:** | {Sender.ABN} |\n")
+            if Sender.Line1:
+                file.write(f"| **Contact:** | {Sender.Line1}<br>{Sender.Line2} |\n")
             file.write("| | |\n")
             file.write("  ---  \n")
             # Footer
-            if Options.footerMsg:
-                file.write(f"<sub><i>{Options.footerMsg}</i></sub>\n")
+            if Options.FooterMsg:
+                file.write(f"<sub><i>{Options.FooterMsg}</i></sub>\n")
 
         # Execution Commands
-        os.system(f"md2pdf --css={PDIR}/default.css \"{self.mdAbsFilename}\" " +
-                  f"\"{self.mdAbsFilename.replace('.md', '.pdf')}\"")
+        md2pdf(f"{self.mdAbsFilename.replace('.md', '.pdf')}",
+               md_file_path=f"{self.mdAbsFilename}",
+               css_file_path=f"{PDIR}/resources/{Options.CSS}",
+               base_url=f"{PDIR}/resources")
         os.remove(self.mdAbsFilename)
-
+        # Log in report
+        f = re.search('/[^/]*.pdf', self.mdAbsFilename.replace('.md', '.pdf'))
+        Report.addTask(f.group()[1:], self.name)
 
 def main():
     print("Welcome to the Simple Invoice Generator!")
     argList = sys.argv[1:]
-    opts = "hsb:o:"; longOpts = ["help", "singular", "batch=", "output="]
+    opts = "hsb:d:r"; longOpts = ["help", "singular", "batch=", "directory=", "report"]
     try:
         args, vals = getopt.getopt(argList, opts, longOpts) 
         u = 0
@@ -149,12 +160,14 @@ def main():
                 u += 1
                 Settings.mode = "b"
                 Settings.batchfile = v
-            elif a in ("-o", "--output"):
+            elif a in ("-d", "--directory"):
                 Settings.setDirectory(v)
+            elif a in ("-r", "--report"):
+                Settings.report = True
         if u == 2:
             raise getopt.error("Usage error.")
         if not Settings.outputDir:
-            Settings.setDirectory(Options.outputDir)
+            Settings.setDirectory(Options.OutputDir)
     except getopt.error:
         print("Incorrect usage!")
         help()
@@ -166,7 +179,29 @@ def main():
         singularMode()
     elif Settings.mode == "b":
         batchMode()
+    if Settings.report:
+        Report.createReport()
     print("Done. Goodbye!")
+
+class Report:
+    tasks = []
+
+    def addTask(filename, recipient):
+        time = datetime.now().strftime('%H:%M:%S %d-%m-%Y')
+        Report.tasks.append({'time':time, 'filename':filename, 'recipient':recipient})
+
+    def createReport():
+        date = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        with open(f"{Settings.outputDir}/Report_{date}.txt", 'w') as file:
+            file.write( "SIMPLE INVOICE GENERATOR REPORT\n\n")
+            file.write(f"Report generated: {date}\n")
+            file.write(f"Output directory: {Settings.outputDir}\n\n")
+            file.write( "TIME & DATE          FILENAME & RECIPIENT\n")
+            file.write( "-------------------------------------------\n")
+            for e in Report.tasks:
+                file.write(f"{e['time']}  {e['filename']}  {e['recipient']}\n")
+            file.write( "-------------------------------------------\n")
+            file.write("End of report.\n")
 
 def inputMode():
     name = input("Recipient Name: ")
@@ -184,8 +219,8 @@ def inputMode():
 
 def singularMode():
     print("Creating invoice...")
-    inv = Invoice(Recipient.name, Recipient.line1, Recipient.line2)
-    for e in (Recipient.activities):
+    inv = Invoice(Recipient.Name, Recipient.Line1, Recipient.Line2)
+    for e in (Recipient.Activities):
         inv.addActivity(e["desc"], e["qty"], e["unitPrc"])
     inv.createInvoice()
 
@@ -219,12 +254,13 @@ def batchMode():
 
 def help():
     """Displays the following help message, then exits"""
-    print("Usage: ./simple_invoice_generator.py [-h] [[-s] OR [-b INPUT.csv]] [-o OUTPUT_DIR]\n")
+    print("Usage: ./simple_invoice_generator.py [-h] [[-s] OR [-b INPUT.csv]] [-d OUTPUT_DIR] [-r]\n")
     print("  no arguments:   create invoice through prompts to user")
     print("  -h, --help:     display this help message and exit")
+    print("  -r, --report:   generate a report of the created invoices (more useful for batches)")
     print("  -s, --singular: create singular invoice from parameters specified in config.py")
-    print("  -b INPUT.CSV, --batch INPUT.CSV:    batch creates invoices from a specified .csv file")
-    print("  -o OUTPUT_DIR, --output OUTPUT_DIR: override output directory specified in config.py")
+    print("  -b INPUT.CSV, --batch INPUT.CSV:     batch creates invoices from a specified .csv file")
+    print("  -d DIRECTORY, --directory DIRECTORY: override output directory specified in config.py")
     print("\nFurther information available in README.md")
     print("Goodbye!")
     sys.exit(1)
@@ -236,5 +272,3 @@ if __name__ == "__main__":
 # TODO:
 #   Implement functionality for custom invoice numbers, custom output filenames
 #   Streamline command-line arguments for the above
-#   Ability to generate reports/logs
-#   Avoid system commands

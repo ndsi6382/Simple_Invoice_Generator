@@ -1,14 +1,15 @@
 # Configuration File for Simple Invoice Generator
 
 # Modify the parameters in this file accordingly.
+
 class Recipient:
-#   To ignore a field, use "".
-    name = "John Smith"
-    line1 = "12 Street Road"
-    line2 = "Sydney, NSW, 2000"
-    activities = [
-#       Add/Remove services here, with credits listed with a negative unitPrc
-#       If "qty" is not applicable, assign it a hyphen string: "-".
+#   Line2 may be ignored by leaving as "".
+    Name = "John Smith"
+    Line1 = "12 Street Road"
+    Line2 = "Sydney, NSW, 2000"
+    Activities = [
+#       Add/Remove services here, with credits listed with a negative unitPrc.
+#       If a "qty" is not applicable, assign it a hyphen string: "-".
 #       {
 #           "desc":"desc",
 #           "qty":"0",
@@ -33,14 +34,16 @@ class Recipient:
 
 
 class Sender:
-#   To ignore a field, use "".
-    name = "Nicholas Lastname"
-    line1 = "nicholasemail@example.com"
-    line2 = "0412 345 678"
-    bsb = "123 456"
-    accNo = "12 345 678"
-    bankName = "National Australia Bank"
-    abn = "12 345 678 901"
+#   'Line[1,2]', 'BankName', 'ABN' may be ignored by leaving as "" (some of 
+#   these details may already be in the letterhead, therefore do not need 
+#   inclusion here).
+    Name = "Nicholas Lastname"
+    BSB = "123 456"
+    AccNo = "12 345 678"
+    BankName = "National Australia Bank"
+    ABN = "12 345 678 901"
+    Line1 = ""
+    Line2 = ""
     
 
 class Options:
@@ -48,12 +51,25 @@ class Options:
 #   Syntax such as '.', '..', or not being prefixed with a slash will be
 #   interpreted as a subdirectory of the current working directory.
 #   Do not suffix directories with '/'.
-#   gst can only True or False.
-    gst = False
-#   "" for no letterhead, otherwise enter path to letterhead.
-#   The letterhead is an image file with a recommended width of 628px.
-    letterhead = "samples/sample_letterhead.png"
-#   "" for no footer message.
-    footerMsg = "*Full amount to be paid within 14 days of receipt."
-#   "" for current working directory, otherwise enter path to output directory.
-    outputDir = "samples"
+
+#   'Report' may only be True or False.
+    Report = False
+
+#   'GST' may only be True or False.
+    GST = True
+
+#   Leave as "" for no Footer Message.
+    FooterMsg = "*Full amount to be paid within 14 days of receipt."
+
+#   Leave as "" for Current Working Directory, otherwise enter path to the 
+#   output directory.
+    OutputDir = ""
+
+#   "" for no letterhead, otherwise enter the filename of the letterhead
+#   image. The letterhead is an image file with a recommended width of 628px.
+#   It must be placed in the 'resources' subdirectory of this program.
+    Letterhead = "sample_letterhead.png"
+
+#   Name of the CSS file to use (leave as "default.css" for no custom styling).
+#   It must be placed in the 'resources' subdirectory of this program.
+    CSS = "default.css"
