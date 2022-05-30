@@ -47,9 +47,9 @@ output from that CSV can be found in the `samples/batch_output` subdirectory.
 The subdirectory also includes a report generated from the sample CSV. CSV 
 files are expected to contain at least 5 headers named as follows: 
 - `name` : Recipient name
-- `contact1` : Recipient details (line 1) (`contact2` : Recipient details 
-(line 2) is optional, but will be read into the invoice) 
-line is optional)
+- `contact1` : Recipient details (line 1)
+- [`contact2` : *Recipient details (line 2) is optional, but will be read into 
+               the invoice if the field exists*]
 - `desc` : Activity description
 - `qty` : Activity quantity (or hrs)
 - `unitPrc` : Unit price (in $)
