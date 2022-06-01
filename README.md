@@ -1,13 +1,13 @@
 # Simple Invoice Generator
 
-This is a simple (linux) command line program to generate invoices (with the 
-Australian options of GST / ABN included). There is also capability to batch 
+This is a simple command line program to generate invoices (in an Australian 
+context - i.e. with GST, ABNs, BSBs, etc.). There is also capability to batch 
 create invoices from a CSV file. An example of an invoice produced by this 
-program can be found in the `samples` subdirectory.
+program can be found in the `samples` subdirectory. Please note that this 
+program has only been tested in a linux environment.
 
 Invoice parameters are set either inside the program through prompts, or 
-through the `config.py` file. The invoice is written in Markdown format, 
-before being converted to PDF.
+through the `config.py` file (see **Configuration**).
 
 ## Setup and Usage
 There is only one dependency: `md2pdf`, which can be installed with: 
@@ -30,9 +30,9 @@ before generating an invoice.
 details, as well as formatting options such as letterheads (an image file for 
 which the recommended width is 628px), footers, and the setting of a default 
 output directory. To **not** include a field, set its value to an empty string 
-`""`. All activity fields must be filled - where a 'qty' is not applicable, a 
-hyphen string `"-"` should be used instead. The default styling makes use of a 
-small CSS file, which can be modified if desired. CSS and letterhead files 
+`""`. All 'activity' fields must be filled - where a 'qty' is not applicable, 
+a hyphen string `"-"` should be used instead. The default styling makes use of 
+a small CSS file, which can be modified if desired. CSS and letterhead files 
 must be placed in the `resources` subdirectory for them to be used.  
 
 Please note the following when using paths: paths beginning with `/` or `\` 
