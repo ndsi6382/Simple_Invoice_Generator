@@ -43,9 +43,9 @@ are no *expected* problems to occur, avoid using spaces in paths to be safe.
 
 ## CSV File Handling and Expectations
 An example CSV has been included in the `samples` subdirectory. The batch 
-output from that CSV can be found in the `samples/batch_output` subdirectory. 
-The subdirectory also includes a report generated from the sample CSV. CSV 
-files are expected to contain at least 5 headers named as follows: 
+output from that CSV can be found in the `samples/sample_batch_output` 
+subdirectory. The subdirectory also includes a report generated from the sample 
+CSV. CSV files are expected to contain at least 5 headers named as follows: 
 - `name` : Recipient name
 - `contact1` : Recipient details (line 1)
 - [`contact2` : *Recipient details (line 2) is optional, but will be read into 
