@@ -1,0 +1,14 @@
+SIMPLE INVOICE GENERATOR
+
+Report generated: 12:22:05 01-06-2022
+Output directory: /home/nicholas/Documents/Workspace/Simple_Invoice_Generator/Invoices
+
+TIME & DATE          FILENAME & RECIPIENT
+-------------------------------------------
+12:22:04 01-06-2022  Invoice_22060100.pdf  Alice Bobson
+12:22:04 01-06-2022  Invoice_22060101.pdf  Bob Bobson
+12:22:04 01-06-2022  Invoice_22060102.pdf  Suburb Public School
+12:22:05 01-06-2022  Invoice_22060103.pdf  Alex Lastname
+12:22:05 01-06-2022  Invoice_22060104.pdf  John Named
+-------------------------------------------
+End of report.
