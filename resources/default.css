@@ -1,11 +1,12 @@
 html *
 {
-   font-family: Georgia, 'Times New Roman', Times, serif !important;
-   line-height: 140%;
+    font-family: sans-serif, Helvetica, Arial;
+    font-stretch: ultra-expanded;
+    line-height: 140%;
 }
 
 table {
-    border: none!important;
+    border: none;
 }
 
 td, th {
