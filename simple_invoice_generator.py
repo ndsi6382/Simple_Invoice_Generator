@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-from datetime import datetime
+
 import getopt, os, sys, csv, re
-from config import *
+from datetime import datetime as dt
 from copy import deepcopy
 from md2pdf.core import md2pdf
+from config import *
 
 # Absolute path of program directory
 PDIR = os.path.dirname(os.path.abspath(__file__))
@@ -33,7 +34,7 @@ class Settings:
 
 class Invoice:
     def __init__(self, name, line1, line2):
-        self.date = datetime.now().strftime('%d/%m/%Y')
+        self.date = dt.now().strftime('%d/%m/%Y')
         self.name = name
         self.line1 = line1
         self.line2 = line2
@@ -56,7 +57,7 @@ class Invoice:
             if customNumber:
                 self.nbr = 1
             else:
-                i = int(datetime.now().strftime('%Y%m%d')[2:]) * 100
+                i = int(dt.now().strftime('%Y%m%d')[2:]) * 100
                 dirlist = os.listdir(Settings.outputDir)
                 while (str(i) in str(dirlist)):
                     i += 1
@@ -143,6 +144,26 @@ class Invoice:
         f = re.search('/[^/]*.pdf', self.mdAbsFilename.replace('.md', '.pdf'))
         Report.addTask(f.group()[1:], self.name)
 
+class Report:
+    tasks = []
+
+    def addTask(filename, recipient):
+        time = dt.now().strftime('%H:%M:%S %d-%m-%Y')
+        Report.tasks.append({'time':time, 'filename':filename, 'recipient':recipient})
+
+    def createReport():
+        with open(f"{Settings.outputDir}/Report_" + 
+                  f"{dt.now().strftime('%Y-%m-%d_%H-%M-%S')}.txt", 'w') as file:
+            file.write( "SIMPLE INVOICE GENERATOR\n\n")
+            file.write(f"Report generated: {dt.now().strftime('%H:%M:%S %d-%m-%Y')}\n")
+            file.write(f"Output directory: {Settings.outputDir}\n\n")
+            file.write( "TIME & DATE          FILENAME & RECIPIENT\n")
+            file.write( "-------------------------------------------\n")
+            for e in Report.tasks:
+                file.write(f"{e['time']}  {e['filename']}  {e['recipient']}\n")
+            file.write( "-------------------------------------------\n")
+            file.write("End of report.\n")
+
 def main():
     print("Welcome to the Simple Invoice Generator!")
     argList = sys.argv[1:]
@@ -182,26 +203,6 @@ def main():
     if Settings.report:
         Report.createReport()
     print("Done. Goodbye!")
-
-class Report:
-    tasks = []
-
-    def addTask(filename, recipient):
-        time = datetime.now().strftime('%H:%M:%S %d-%m-%Y')
-        Report.tasks.append({'time':time, 'filename':filename, 'recipient':recipient})
-
-    def createReport():
-        date = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        with open(f"{Settings.outputDir}/Report_{date}.txt", 'w') as file:
-            file.write( "SIMPLE INVOICE GENERATOR REPORT\n\n")
-            file.write(f"Report generated: {date}\n")
-            file.write(f"Output directory: {Settings.outputDir}\n\n")
-            file.write( "TIME & DATE          FILENAME & RECIPIENT\n")
-            file.write( "-------------------------------------------\n")
-            for e in Report.tasks:
-                file.write(f"{e['time']}  {e['filename']}  {e['recipient']}\n")
-            file.write( "-------------------------------------------\n")
-            file.write("End of report.\n")
 
 def inputMode():
     name = input("Recipient Name: ")
@@ -261,14 +262,10 @@ def help():
     print("  -s, --singular: create singular invoice from parameters specified in config.py")
     print("  -b INPUT.CSV, --batch INPUT.CSV:     batch creates invoices from a specified .csv file")
     print("  -d DIRECTORY, --directory DIRECTORY: override output directory specified in config.py")
-    print("\nFurther information available in README.md")
+    print("\nSee the README.md for further details...")
     print("Goodbye!")
     sys.exit(1)
 
 if __name__ == "__main__":
     main()
     sys.exit(0)
-
-# TODO:
-#   Implement functionality for custom invoice numbers, custom output filenames
-#   Streamline command-line arguments for the above
