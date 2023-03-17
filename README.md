@@ -59,7 +59,3 @@ Recipient fields may be empty in order to accomodate invoices where there is
 more than one activity. Entries in the CSV file that contain an empty `name` 
 and `contact1` field but filled `desc`, `qty`, and `unitPrc` fields will be 
 attributed to the recipient details above.
-
-## Further Updates
-- Implement functionality for custom invoice numbers, custom output filenames
-- Streamline commandline arguments for the above
